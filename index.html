@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free AI & SEO Readiness Check - MISO Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --charcoal:#1A1A1A;
+    --cream:#E6E2DB;
+    --sage:#7A8C76;
+    --olive:#8A7754;
+    --cream-deep:#DED7C9;
+    --line: #D3D3D3;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--charcoal);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{
+    max-width:640px;
+    margin:0 auto;
+    padding:56px 24px 80px;
+  }
+  .eyebrow{
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--olive);
+    font-weight:600;
+    margin-bottom:14px;
+  }
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:clamp(30px,5vw,42px);
+    line-height:1.12;
+    margin:0 0 16px;
+    letter-spacing:-0.01em;
+  }
+  .sub{
+    font-size:16px;
+    line-height:1.6;
+    color:rgba(26,26,26,0.75);
+    max-width:46ch;
+    margin:0 0 28px;
+  }
+  .startbtn{
+    appearance:none;
+    border:none;
+    background:var(--charcoal);
+    color:var(--cream);
+    font-family:'Inter',sans-serif;
+    font-size:15px;
+    font-weight:600;
+    padding:15px 28px;
+    border-radius:999px;
+    cursor:pointer;
+    letter-spacing:0.01em;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .startbtn:hover{ background:var(--olive); transform:translateY(-1px); }
+  .trustline{
+    margin-top:16px;
+    font-size:13px;
+    color:rgba(26,26,26,0.55);
+  }
+  .card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:40px 36px;
+    margin-top:8px;
+  }
+  .hide{ display:none !important; }
+
+  /* progress */
+  .progress-row{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:28px;
+  }
+  .progress-track{
+    flex:1;
+    height:2px;
+    background:var(--line);
+    position:relative;
+  }
+  .progress-fill{
+    position:absolute; left:0; top:0; bottom:0;
+    background:var(--sage);
+    width:0%;
+    transition:width .3s ease;
+  }
+  .progress-label{
+    font-size:12px;
+    color:rgba(26,26,26,0.55);
+    white-space:nowrap;
+  }
+
+  .cat-eyebrow{
+    font-size:11px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--sage);
+    font-weight:600;
+    margin-bottom:10px;
+  }
+  .q-num{
+    font-family:'Fraunces',serif;
+    font-size:13px;
+    color:var(--olive);
+    margin-bottom:6px;
+  }
+  .q-text{
+    font-family:'Fraunces',serif;
+    font-size:22px;
+    line-height:1.35;
+    font-weight:500;
+    margin:0 0 26px;
+  }
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .opt{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px 16px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    cursor:pointer;
+    font-size:15px;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .opt:hover{ border-color:var(--olive); }
+  .opt.selected{
+    border-color:var(--sage);
+    background:rgba(122,140,118,0.08);
+  }
+  .opt .dot{
+    width:16px; height:16px;
+    border-radius:50%;
+    border:1.5px solid var(--charcoal);
+    flex-shrink:0;
+    position:relative;
+  }
+  .opt.selected .dot{ border-color:var(--sage); }
+  .opt.selected .dot::after{
+    content:'';
+    position:absolute; inset:3px;
+    border-radius:50%;
+    background:var(--sage);
+  }
+  .navrow{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:32px;
+  }
+  .backlink{
+    background:none; border:none;
+    font-family:'Inter',sans-serif;
+    font-size:14px;
+    color:rgba(26,26,26,0.55);
+    cursor:pointer;
+    padding:8px 0;
+  }
+  .backlink:hover{ color:var(--charcoal); }
+  .nextbtn{
+    appearance:none; border:none;
+    background:var(--charcoal);
+    color:var(--cream);
+    font-size:14px; font-weight:600;
+    padding:13px 24px;
+    border-radius:999px;
+    cursor:pointer;
+    opacity:0.35;
+    pointer-events:none;
+    transition:opacity .15s ease, background .15s ease;
+  }
+  .nextbtn.active{ opacity:1; pointer-events:auto; }
+  .nextbtn.active:hover{ background:var(--olive); }
+
+  /* gate */
+  .gate h2{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:26px;
+    margin:0 0 10px;
+  }
+  .gate p{ font-size:15px; line-height:1.6; color:rgba(26,26,26,0.75); margin:0 0 24px; }
+  .field{
+    width:100%;
+    padding:14px 16px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    font-size:15px;
+    font-family:'Inter',sans-serif;
+    margin-bottom:14px;
+  }
+  .field:focus{ outline:none; border-color:var(--sage); }
+  .microcopy{ font-size:12px; color:rgba(26,26,26,0.5); margin-top:10px; }
+
+  /* results */
+  .score-block{
+    text-align:center;
+    padding:12px 0 28px;
+    border-bottom:1px solid var(--line);
+    margin-bottom:28px;
+  }
+  .score-num{
+    font-family:'Fraunces',serif;
+    font-size:64px;
+    font-weight:500;
+    line-height:1;
+    color:var(--charcoal);
+  }
+  .score-max{ font-size:20px; color:rgba(26,26,26,0.4); }
+  .band-title{
+    font-family:'Fraunces',serif;
+    font-size:19px;
+    color:var(--olive);
+    margin:10px 0 12px;
+  }
+  .band-desc{ font-size:14px; color:rgba(26,26,26,0.7); max-width:44ch; margin:0 auto; line-height:1.6;}
+  .cat-row{
+    margin-bottom:16px;
+  }
+  .cat-row-top{
+    display:flex; justify-content:space-between;
+    font-size:13px;
+    margin-bottom:6px;
+  }
+  .cat-row-top .name{ font-weight:600; }
+  .cat-row-top .pct{ color:rgba(26,26,26,0.5); }
+  .bar-track{ height:6px; background:var(--cream-deep); border-radius:3px; overflow:hidden;}
+  .bar-fill{ height:100%; background:var(--sage); border-radius:3px; }
+  .upsell{
+    margin-top:32px;
+    padding:28px 26px;
+    background:var(--charcoal);
+    color:var(--cream);
+    border-radius:14px;
+  }
+  .upsell h3{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:21px;
+    margin:0 0 10px;
+  }
+  .upsell p{ font-size:14px; line-height:1.6; color:rgba(247,241,230,0.8); margin:0 0 20px; }
+  .upsell-btn{
+    display:inline-block;
+    background:var(--cream);
+    color:var(--charcoal);
+    font-weight:600;
+    font-size:14px;
+    padding:13px 22px;
+    border-radius:999px;
+    text-decoration:none;
+  }
+  .upsell-btn:hover{ background:var(--sage); color:#fff; }
+  .secondary-cta{
+    margin-top:18px;
+    font-size:13px;
+    color:rgba(26,26,26,0.55);
+    text-align:center;
+  }
+  .secondary-cta a{ color:var(--olive); }
+  footer{
+    text-align:center;
+    margin-top:40px;
+    font-size:12px;
+    color:rgba(26,26,26,0.4);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- INTRO -->
+  <div id="intro">
+    <div class="eyebrow">Free 5-Minute Check · MISO Studio</div>
+    <h1>Is your website ready for AI search?</h1>
+    <p class="sub">Google's AI Overviews now answer most searches before anyone clicks through. Take the free check to see how your website measures up - and what to fix first.</p>
+    <button class="startbtn" onclick="startQuiz()">Start My Free Check →</button>
+    <div class="trustline">Takes 5 minutes. No credit card. Just your email for your results.</div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz" class="hide">
+    <div class="card">
+      <div class="progress-row">
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-label" id="progressLabel">Q1 / 12</div>
+      </div>
+      <div class="cat-eyebrow" id="catLabel"></div>
+      <div class="q-num" id="qNum"></div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="options"></div>
+      <div class="navrow">
+        <button class="backlink" id="backBtn" onclick="prevQ()">← Back</button>
+        <button class="nextbtn" id="nextBtn" onclick="nextQ()">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GATE -->
+  <div id="gate" class="hide">
+    <div class="card gate">
+      <div class="eyebrow">Your results are ready</div>
+      <h2>See your full score.</h2>
+      <p>Enter your email to see your score, your breakdown across all six areas, and the first thing to fix.</p>
+      <input class="field" type="text" id="nameField" placeholder="First name">
+      <input class="field" type="email" id="emailField" placeholder="Your email address">
+      <button class="startbtn" onclick="revealResults()">Show My Results →</button>
+      <div class="microcopy">No spam - just your results, and the occasional email about building a website that actually works for you.</div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results" class="hide">
+    <div class="card">
+      <div class="score-block">
+        <div><span class="score-num" id="scoreNum">0</span><span class="score-max">/100</span></div>
+        <div class="band-title" id="bandTitle"></div>
+        <div class="band-desc" id="bandDesc"></div>
+      </div>
+      <div id="catBreakdown"></div>
+
+      <div class="upsell">
+        <h3>Want the full picture?</h3>
+        <p>This free check gives you a snapshot. The full AI Readiness Audit goes deeper - scoring your site across all six areas in detail, with a 30-minute walkthrough so you know exactly what to fix and why.</p>
+        <a class="upsell-btn" href="https://miso-studio.au" target="_blank">Book My Full Audit - $350 + GST</a>
+      </div>
+      <div class="secondary-cta">Not ready yet? <a href="https://instagram.com" target="_blank">Follow along on Instagram</a> for more free tips.</div>
+    </div>
+    <footer>MISO Studio · miso-studio.au</footer>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  { cat: "Content & Messaging", q: "Does your homepage clearly explain who you help and what you do within 5 seconds of landing on it?" },
+  { cat: "Content & Messaging", q: "Is your website copy written in your own voice and story - not generic template text?" },
+  { cat: "AI & Search Readiness", q: "Is your content structured with clear headings, so tools like Google AI Overviews or ChatGPT could easily read and summarise it?" },
+  { cat: "AI & Search Readiness", q: "Do your About and service pages show genuine expertise and detail, rather than a few thin, generic sentences?" },
+  { cat: "SEO Fundamentals", q: "Does every page have a unique, descriptive title and meta description?" },
+  { cat: "SEO Fundamentals", q: "Is your Google Business Profile complete, accurate, and up to date?" },
+  { cat: "Design & UX", q: "Is your site easy to use on mobile - no pinching, zooming, or awkward tapping?" },
+  { cat: "Design & UX", q: "Does your design feel intentional and true to your brand, rather than a generic template?" },
+  { cat: "Technical & Performance", q: "Does your homepage load in under 3 seconds?" },
+  { cat: "Technical & Performance", q: "Have you checked your Core Web Vitals (via Google PageSpeed Insights) in the last 6 months?" },
+  { cat: "Trust & Conversion", q: "Do you have genuine client testimonials or social proof visible on your site?" },
+  { cat: "Trust & Conversion", q: "Is there a clear, obvious next step - enquiry form, booking link, or contact button - on every page?" },
+];
+const CATS = ["Content & Messaging","AI & Search Readiness","SEO Fundamentals","Design & UX","Technical & Performance","Trust & Conversion"];
+
+let current = 0;
+let answers = new Array(questions.length).fill(null); // 0,1,2
+
+function startQuiz(){
+  document.getElementById('intro').classList.add('hide');
+  document.getElementById('quiz').classList.remove('hide');
+  renderQ();
+}
+
+function renderQ(){
+  const item = questions[current];
+  document.getElementById('catLabel').textContent = item.cat;
+  document.getElementById('qNum').textContent = 'Question ' + (current+1);
+  document.getElementById('qText').textContent = item.q;
+  document.getElementById('progressLabel').textContent = 'Q' + (current+1) + ' / ' + questions.length;
+  document.getElementById('progressFill').style.width = ((current)/questions.length*100) + '%';
+
+  const opts = [ {label:'Yes', val:2}, {label:'Partially', val:1}, {label:'No', val:0} ];
+  const optWrap = document.getElementById('options');
+  optWrap.innerHTML = '';
+  opts.forEach(o => {
+    const div = document.createElement('div');
+    div.className = 'opt' + (answers[current]===o.val ? ' selected' : '');
+    div.innerHTML = '<span class="dot"></span><span>' + o.label + '</span>';
+    div.onclick = () => { answers[current] = o.val; renderQ(); };
+    optWrap.appendChild(div);
+  });
+
+  document.getElementById('backBtn').style.visibility = current===0 ? 'hidden' : 'visible';
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.textContent = current === questions.length-1 ? 'See Results →' : 'Next →';
+  if(answers[current] !== null){ nextBtn.classList.add('active'); } else { nextBtn.classList.remove('active'); }
+}
+
+function nextQ(){
+  if(answers[current] === null) return;
+  if(current < questions.length-1){
+    current++;
+    renderQ();
+  } else {
+    document.getElementById('quiz').classList.add('hide');
+    document.getElementById('gate').classList.remove('hide');
+  }
+}
+function prevQ(){
+  if(current>0){ current--; renderQ(); }
+}
+
+function revealResults(){
+  const email = document.getElementById('emailField').value.trim();
+  if(!email || !email.includes('@')){
+    document.getElementById('emailField').style.borderColor = '#B5533D';
+    return;
+  }
+  // NOTE for implementation: this is where the email + name should be
+  // sent to Mailerlite (or chosen ESP) via API/webhook before revealing results.
+  // console.log({ name: document.getElementById('nameField').value, email });
+
+  document.getElementById('gate').classList.add('hide');
+  document.getElementById('results').classList.remove('hide');
+
+  const total = answers.reduce((a,b) => a+b, 0);
+  const pct = Math.round((total / (questions.length*2)) * 100);
+  document.getElementById('scoreNum').textContent = pct;
+
+  let bandTitle, bandDesc;
+  if(pct <= 40){
+    bandTitle = 'Just Getting Started';
+    bandDesc = "Your website has real potential, but right now it's likely working against you - both with visitors and with AI search tools. A few focused changes will make a big difference.";
+  } else if(pct <= 70){
+    bandTitle = 'Good Foundations';
+    bandDesc = "You've got the basics in place. The gap now is sharpening your content and structure so both people and AI systems trust and choose you faster.";
+  } else {
+    bandTitle = 'Strong, Room to Refine';
+    bandDesc = "You're ahead of most regional small business sites. The opportunity now is fine-tuning - the details that turn a good site into your best sales tool.";
+  }
+  document.getElementById('bandTitle').textContent = bandTitle;
+  document.getElementById('bandDesc').textContent = bandDesc;
+
+  const catWrap = document.getElementById('catBreakdown');
+  catWrap.innerHTML = '';
+  CATS.forEach((cat, i) => {
+    const a = answers[i*2], b = answers[i*2+1];
+    const catPct = Math.round(((a+b)/4)*100);
+    const row = document.createElement('div');
+    row.className = 'cat-row';
+    row.innerHTML = '<div class="cat-row-top"><span class="name">'+cat+'</span><span class="pct">'+catPct+'%</span></div>' +
+      '<div class="bar-track"><div class="bar-fill" style="width:'+catPct+'%"></div></div>';
+    catWrap.appendChild(row);
+  });
+}
+</script>
+</body>
+</html>
