@@ -416,14 +416,18 @@ function prevQ(){
 }
 
 function revealResults(){
+  const name = document.getElementById('nameField').value.trim();
   const email = document.getElementById('emailField').value.trim();
   if(!email || !email.includes('@')){
     document.getElementById('emailField').style.borderColor = '#B5533D';
     return;
   }
-  // NOTE for implementation: this is where the email + name should be
-  // sent to Mailerlite (or chosen ESP) via API/webhook before revealing results.
-  // console.log({ name: document.getElementById('nameField').value, email });
+
+  fetch('/api/subscribe', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, email })
+  }).catch(err => console.error('Subscribe failed:', err));
 
   document.getElementById('gate').classList.add('hide');
   document.getElementById('results').classList.remove('hide');
