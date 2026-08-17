@@ -456,17 +456,21 @@ function revealResults(){
   }
   consentRow.classList.remove('error');
 
+  const total = answers.reduce((a,b) => a+b, 0);
+  const pct = Math.round((total / (questions.length*2)) * 100);
+  const catData = CATS.map((cat, i) => {
+    const a = answers[i*2], b = answers[i*2+1];
+    return { name: cat, pct: Math.round(((a+b)/4)*100) };
+  });
+
   fetch('/api/subscribe', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, email })
+    body: JSON.stringify({ name, email, totalScore: pct, categories: catData })
   }).catch(err => console.error('Subscribe failed:', err));
 
   document.getElementById('gate').classList.add('hide');
   document.getElementById('results').classList.remove('hide');
-
-  const total = answers.reduce((a,b) => a+b, 0);
-  const pct = Math.round((total / (questions.length*2)) * 100);
   document.getElementById('scoreNum').textContent = pct;
 
   let bandTitle, bandDesc;
@@ -485,9 +489,7 @@ function revealResults(){
 
   const catWrap = document.getElementById('catBreakdown');
   catWrap.innerHTML = '';
-  CATS.forEach((cat, i) => {
-    const a = answers[i*2], b = answers[i*2+1];
-    const catPct = Math.round(((a+b)/4)*100);
+  catData.forEach(({ name: cat, pct: catPct }) => {
     const row = document.createElement('div');
     row.className = 'cat-row';
     row.innerHTML = '<div class="cat-row-top"><span class="name">'+cat+'</span><span class="pct">'+catPct+'%</span></div>' +
